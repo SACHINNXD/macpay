@@ -1,11 +1,11 @@
-// Auto redirect if already logged in
+// AUTO REDIRECT
 if (localStorage.getItem("loggedIn") === "true") {
   if (!location.href.includes("home.html")) {
-    window.location.href = "home.html";
+    location.href = "home.html";
   }
 }
 
-// Toggle login / register
+// TOGGLE
 function showLogin() {
   loginBox.style.display = "block";
   registerBox.style.display = "none";
@@ -20,17 +20,16 @@ function showRegister() {
   loginTab.classList.remove("active");
 }
 
-// Default
 showLogin();
 
-// UserID preview
+// USERID PREVIEW
 if (document.getElementById("userid")) {
   userid.addEventListener("input", () => {
     uidPreview.innerText = userid.value;
   });
 }
 
-// Register
+// REGISTER
 function register() {
   const user = {
     fname: fname.value,
@@ -49,16 +48,13 @@ function register() {
 
   localStorage.setItem("userData", JSON.stringify(user));
   localStorage.setItem("loggedIn", "true");
-  window.location.href = "home.html";
+  location.href = "home.html";
 }
 
-// Login
+// LOGIN
 function login() {
   const stored = JSON.parse(localStorage.getItem("userData"));
-  if (!stored) {
-    alert("No account found");
-    return;
-  }
+  if (!stored) return alert("No account found");
 
   if (
     (loginId.value === stored.email ||
@@ -66,14 +62,65 @@ function login() {
     loginPassword.value === stored.password
   ) {
     localStorage.setItem("loggedIn", "true");
-    window.location.href = "home.html";
+    location.href = "home.html";
   } else {
-    alert("Invalid login details");
+    alert("Invalid credentials");
   }
 }
 
-// Logout
+// LOGOUT
 function logout() {
   localStorage.setItem("loggedIn", "false");
-  window.location.href = "index.html";
+  location.href = "index.html";
+}
+
+// -------- HOME LOGIC --------
+if (location.href.includes("home.html")) {
+  if (localStorage.getItem("loggedIn") !== "true") {
+    location.href = "index.html";
+  }
+
+  const user = JSON.parse(localStorage.getItem("userData"));
+  let balances = JSON.parse(localStorage.getItem("balances")) || {};
+
+  if (!balances[user.userid]) {
+    balances[user.userid] = 2000;
+    localStorage.setItem("balances", JSON.stringify(balances));
+  }
+
+  balance.innerText = "₹" + balances[user.userid];
+}
+
+// MODAL
+function openPay() {
+  payModal.style.display = "flex";
+}
+
+function closePay() {
+  payModal.style.display = "none";
+}
+
+// PAY
+function sendPayment() {
+  const user = JSON.parse(localStorage.getItem("userData"));
+  let balances = JSON.parse(localStorage.getItem("balances"));
+
+  const to = payUserId.value.trim();
+  const amt = Number(payAmount.value);
+  const pass = payPassword.value;
+
+  if (!to || !amt || !pass) return alert("Fill all fields");
+  if (pass !== user.password) return alert("Wrong password");
+  if (balances[user.userid] < amt) return alert("Insufficient balance");
+
+  if (!balances[to]) balances[to] = 0;
+
+  balances[user.userid] -= amt;
+  balances[to] += amt;
+
+  localStorage.setItem("balances", JSON.stringify(balances));
+  balance.innerText = "₹" + balances[user.userid];
+
+  closePay();
+  alert("Payment successful");
 }
