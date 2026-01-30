@@ -2,29 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login / Register</title>
+  <title>Auth</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-  <h2>Register</h2>
-  <input type="text" id="fname" placeholder="First Name">
-  <input type="text" id="lname" placeholder="Last Name">
-  <input type="number" id="number" placeholder="Phone Number">
-  <input type="email" id="email" placeholder="Email">
-  <input type="number" id="age" placeholder="Age">
-  <input type="text" id="userid" placeholder="User ID (without @okmacpay)">
-  <small>Your User ID will be: <b><span id="uidPreview"></span>@okmacpay</b></small>
-  <input type="password" id="regPassword" placeholder="Password">
-  <button onclick="register()">Register</button>
+  <div class="tabs">
+    <button id="loginTab" onclick="showLogin()">Login</button>
+    <button id="registerTab" onclick="showRegister()">Register</button>
+  </div>
 
-  <hr>
+  <!-- LOGIN -->
+  <div id="loginBox">
+    <h2>Login</h2>
+    <input type="text" id="loginId" placeholder="Email or User ID">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
 
-  <h2>Login</h2>
-  <input type="text" id="loginId" placeholder="Email or User ID">
-  <input type="password" id="loginPassword" placeholder="Password">
-  <button onclick="login()">Login</button>
+  <!-- REGISTER -->
+  <div id="registerBox" style="display:none;">
+    <h2>Register</h2>
+    <input type="text" id="fname" placeholder="First Name">
+    <input type="text" id="lname" placeholder="Last Name">
+    <input type="number" id="number" placeholder="Phone Number">
+    <input type="email" id="email" placeholder="Email">
+    <input type="number" id="age" placeholder="Age">
+    <input type="text" id="userid" placeholder="User ID (without @okmacpay)">
+    <small>User ID will be: <b><span id="uidPreview"></span>@okmacpay</b></small>
+    <input type="password" id="regPassword" placeholder="Password">
+    <button onclick="register()">Create Account</button>
+  </div>
 </div>
 
 <script src="script.js"></script>
