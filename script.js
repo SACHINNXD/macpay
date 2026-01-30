@@ -5,14 +5,32 @@ if (localStorage.getItem("loggedIn") === "true") {
   }
 }
 
+// Toggle UI
+function showLogin() {
+  loginBox.style.display = "block";
+  registerBox.style.display = "none";
+  loginTab.classList.add("active");
+  registerTab.classList.remove("active");
+}
+
+function showRegister() {
+  registerBox.style.display = "block";
+  loginBox.style.display = "none";
+  registerTab.classList.add("active");
+  loginTab.classList.remove("active");
+}
+
+// Default tab
+showLogin();
+
 // UserID preview
-const useridInput = document.getElementById("userid");
-if (useridInput) {
-  useridInput.addEventListener("input", () => {
-    document.getElementById("uidPreview").innerText = useridInput.value;
+if (document.getElementById("userid")) {
+  userid.addEventListener("input", () => {
+    uidPreview.innerText = userid.value;
   });
 }
 
+// Register
 function register() {
   const user = {
     fname: fname.value,
@@ -25,7 +43,7 @@ function register() {
   };
 
   if (!user.email || !user.password || !userid.value) {
-    alert("Please fill all required fields");
+    alert("Fill all required fields");
     return;
   }
 
@@ -34,32 +52,35 @@ function register() {
   window.location.href = "home.html";
 }
 
+// Login
 function login() {
   const stored = JSON.parse(localStorage.getItem("userData"));
   if (!stored) {
-    alert("No user registered");
+    alert("No account found");
     return;
   }
 
-  const id = loginId.value;
-  const pass = loginPassword.value;
-
-  if ((id === stored.email || id === stored.userid) && pass === stored.password) {
+  if (
+    (loginId.value === stored.email ||
+     loginId.value === stored.userid) &&
+    loginPassword.value === stored.password
+  ) {
     localStorage.setItem("loggedIn", "true");
     window.location.href = "home.html";
   } else {
-    alert("Invalid credentials");
+    alert("Invalid login details");
   }
 }
 
+// Logout
 function logout() {
   localStorage.setItem("loggedIn", "false");
   window.location.href = "index.html";
 }
 
-// Show user info on home
+// Home page info
 if (location.href.includes("home.html")) {
   const user = JSON.parse(localStorage.getItem("userData"));
   document.getElementById("userInfo").innerText =
-    `Logged in as: ${user.userid}`;
+    `Logged in as ${user.userid}`;
 }
