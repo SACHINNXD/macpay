@@ -5,7 +5,7 @@ if (localStorage.getItem("loggedIn") === "true") {
   }
 }
 
-// Toggle UI
+// Toggle login / register
 function showLogin() {
   loginBox.style.display = "block";
   registerBox.style.display = "none";
@@ -20,7 +20,7 @@ function showRegister() {
   loginTab.classList.remove("active");
 }
 
-// Default tab
+// Default
 showLogin();
 
 // UserID preview
@@ -76,11 +76,4 @@ function login() {
 function logout() {
   localStorage.setItem("loggedIn", "false");
   window.location.href = "index.html";
-}
-
-// Home page info
-if (location.href.includes("home.html")) {
-  const user = JSON.parse(localStorage.getItem("userData"));
-  document.getElementById("userInfo").innerText =
-    `Logged in as ${user.userid}`;
 }
