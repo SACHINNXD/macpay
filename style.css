@@ -11,15 +11,14 @@ body {
   justify-content: center;
 }
 
-/* MAIN CONTAINER */
+/* AUTH CONTAINER */
 .container {
   width: 380px;
   padding: 22px;
   background: linear-gradient(145deg, #0b0b1f, #12002b);
   border-radius: 16px;
-  box-shadow:
-    0 0 25px rgba(0, 255, 170, 0.25),
-    0 0 40px rgba(170, 0, 255, 0.15);
+  box-shadow: 0 0 25px rgba(0,255,178,0.25),
+              0 0 40px rgba(170,0,255,0.15);
 }
 
 /* TABS */
@@ -34,55 +33,42 @@ body {
   padding: 10px;
   border-radius: 10px;
   border: none;
-  cursor: pointer;
   background: #140033;
   color: #aaa;
-  font-weight: 600;
+  cursor: pointer;
 }
 
 .tabs button.active {
   background: linear-gradient(90deg, #00ffb2, #9b00ff);
   color: #000;
-  box-shadow: 0 0 12px rgba(0,255,178,0.6);
 }
 
-/* INNER CARD */
+/* CARDS */
 #loginBox,
 #registerBox {
   background: rgba(255,255,255,0.03);
   padding: 18px;
   border-radius: 14px;
-  box-shadow: inset 0 0 15px rgba(255,255,255,0.04);
 }
 
-/* HEADINGS */
+/* TEXT */
 h2 {
   text-align: center;
   color: #00ffb2;
-  margin-bottom: 12px;
 }
 
 /* INPUTS */
 input {
   width: 100%;
-  padding: 10px 12px;
+  padding: 10px;
   margin: 8px 0;
   border-radius: 10px;
   border: 1px solid #2b2b4f;
   background: #0a001a;
-  color: #fff;
-  outline: none;
+  color: white;
 }
 
-input:focus {
-  border-color: #9b00ff;
-  box-shadow: 0 0 8px rgba(155,0,255,0.6);
-}
-
-/* USERID PREVIEW */
 small {
-  display: block;
-  margin: 4px 0 8px;
   color: #aaa;
 }
 
@@ -92,8 +78,9 @@ small span {
 
 /* BUTTONS */
 button {
-  margin-top: 10px;
+  width: 100%;
   padding: 12px;
+  margin-top: 10px;
   border-radius: 12px;
   border: none;
   font-weight: bold;
@@ -102,21 +89,65 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  box-shadow: 0 0 18px rgba(0,255,178,0.6);
-}
-
-/* LOGOUT BUTTON */
+/* LOGOUT */
 .logout-btn {
   position: fixed;
   top: 20px;
   right: 20px;
+  width: auto;
   padding: 10px 18px;
-  border-radius: 12px;
-  border: none;
-  font-weight: bold;
-  background: linear-gradient(90deg, #00ffb2, #9b00ff);
-  color: #000;
-  cursor: pointer;
-  box-shadow: 0 0 15px rgba(0,255,178,0.6);
+}
+
+/* BALANCE */
+.balance-box {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(145deg, #0b0b1f, #12002b);
+  padding: 18px 30px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,255,178,0.5),
+              0 0 35px rgba(155,0,255,0.3);
+}
+
+.balance-box span {
+  color: #aaa;
+}
+
+.balance-box h1 {
+  color: #00ffb2;
+}
+
+/* PAY BUTTON */
+.pay-btn {
+  position: fixed;
+  top: 180px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  padding: 14px 28px;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  width: 320px;
+  background: linear-gradient(145deg, #0b0b1f, #12002b);
+  padding: 22px;
+  border-radius: 16px;
+}
+
+.modal-box .cancel {
+  background: #2b2b4f;
+  color: white;
 }
