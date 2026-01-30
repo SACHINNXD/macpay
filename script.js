@@ -1,11 +1,15 @@
-// AUTO REDIRECT
-if (localStorage.getItem("loggedIn") === "true") {
-  if (!location.href.includes("home.html")) {
-    location.href = "home.html";
-  }
+// ---------- GLOBAL ----------
+const loggedIn = localStorage.getItem("loggedIn");
+
+// Redirect logic
+if (loggedIn === "true" && !location.href.includes("home.html")) {
+  location.href = "home.html";
+}
+if (loggedIn !== "true" && location.href.includes("home.html")) {
+  location.href = "index.html";
 }
 
-// TOGGLE
+// ---------- AUTH ----------
 function showLogin() {
   loginBox.style.display = "block";
   registerBox.style.display = "none";
@@ -20,38 +24,36 @@ function showRegister() {
   loginTab.classList.remove("active");
 }
 
-showLogin();
+if (typeof showLogin === "function") showLogin();
 
-// USERID PREVIEW
 if (document.getElementById("userid")) {
   userid.addEventListener("input", () => {
     uidPreview.innerText = userid.value;
   });
 }
 
-// REGISTER
 function register() {
   const user = {
-    fname: fname.value,
-    lname: lname.value,
-    number: number.value,
     email: email.value,
-    age: age.value,
     userid: userid.value + "@okmacpay",
     password: regPassword.value
   };
 
-  if (!user.email || !user.password || !userid.value) {
-    alert("Fill all required fields");
-    return;
+  if (!user.email || !userid.value || !user.password) {
+    return alert("Fill all required fields");
   }
 
   localStorage.setItem("userData", JSON.stringify(user));
   localStorage.setItem("loggedIn", "true");
+
+  // Initialize balance
+  let balances = JSON.parse(localStorage.getItem("balances")) || {};
+  balances[user.userid] = 2000;
+  localStorage.setItem("balances", JSON.stringify(balances));
+
   location.href = "home.html";
 }
 
-// LOGIN
 function login() {
   const stored = JSON.parse(localStorage.getItem("userData"));
   if (!stored) return alert("No account found");
@@ -68,58 +70,60 @@ function login() {
   }
 }
 
-// LOGOUT
 function logout() {
   localStorage.setItem("loggedIn", "false");
   location.href = "index.html";
 }
 
-// -------- HOME LOGIC --------
+// ---------- HOME ----------
 if (location.href.includes("home.html")) {
-  if (localStorage.getItem("loggedIn") !== "true") {
-    location.href = "index.html";
-  }
-
   const user = JSON.parse(localStorage.getItem("userData"));
   let balances = JSON.parse(localStorage.getItem("balances")) || {};
 
-  if (!balances[user.userid]) {
-    balances[user.userid] = 2000;
+  if (balances[user.userid] === undefined) {
+    balances[user.userid] = 2000; // ✅ FIX
     localStorage.setItem("balances", JSON.stringify(balances));
   }
 
-  balance.innerText = "₹" + balances[user.userid];
+  document.getElementById("balance").innerText =
+    "₹" + balances[user.userid];
 }
 
-// MODAL
+// ---------- PAY ----------
 function openPay() {
-  payModal.style.display = "flex";
+  document.getElementById("payModal").style.display = "flex";
 }
 
 function closePay() {
-  payModal.style.display = "none";
+  document.getElementById("payModal").style.display = "none";
 }
 
-// PAY
 function sendPayment() {
   const user = JSON.parse(localStorage.getItem("userData"));
-  let balances = JSON.parse(localStorage.getItem("balances"));
+  let balances = JSON.parse(localStorage.getItem("balances")) || {};
 
   const to = payUserId.value.trim();
-  const amt = Number(payAmount.value);
+  const amount = Number(payAmount.value);
   const pass = payPassword.value;
 
-  if (!to || !amt || !pass) return alert("Fill all fields");
-  if (pass !== user.password) return alert("Wrong password");
-  if (balances[user.userid] < amt) return alert("Insufficient balance");
+  if (!to || amount <= 0 || !pass)
+    return alert("Fill all fields");
 
-  if (!balances[to]) balances[to] = 0;
+  if (pass !== user.password)
+    return alert("Wrong password");
 
-  balances[user.userid] -= amt;
-  balances[to] += amt;
+  if (balances[user.userid] < amount)
+    return alert("Insufficient balance");
+
+  if (balances[to] === undefined) balances[to] = 2000;
+
+  balances[user.userid] -= amount;
+  balances[to] += amount;
 
   localStorage.setItem("balances", JSON.stringify(balances));
-  balance.innerText = "₹" + balances[user.userid];
+
+  document.getElementById("balance").innerText =
+    "₹" + balances[user.userid];
 
   closePay();
   alert("Payment successful");
